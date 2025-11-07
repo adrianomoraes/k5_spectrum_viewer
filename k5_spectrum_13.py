@@ -1785,7 +1785,7 @@ class K5ViewerApp:
             
         pygame.display.flip()
 
-def _render_connection_menu(self):
+    def _render_connection_menu(self):
         pygame.display.set_caption(f"{self.base_title} – Connection Manager")
         title_surf = self.scale_large_font.render("Select a COM Port to Connect", True, (220, 220, 220))
         self.screen.blit(title_surf, (20, self.TOOLBAR_HEIGHT + 20))
