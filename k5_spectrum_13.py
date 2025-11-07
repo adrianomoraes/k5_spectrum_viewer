@@ -225,7 +225,9 @@ def get_session_data_chunk(session_identifier, offset, limit):
 
 # Serial configuration
 DEFAULT_PORT = 'COM5'
-BAUDRATE = 38400
+        
+#BAUDRATE = 38400
+BAUDRATE = 9600
 TIMEOUT = 0.5
 
 # Screen configuration
