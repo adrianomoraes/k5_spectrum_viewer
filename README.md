@@ -4,7 +4,7 @@
 
 [![A link to the K5Viewer demo video](assets/screenshot.png)](https://youtu.be/BLnvxmcPg08)
 
-**This fork** introduces a significantly more robust **Anchor-Based OCR Engine**. This new system uses the `.` character in a frequency as an anchor, allowing it to reliably read centered text of varying lengths (e.g., `18.00000` or `446.10000`). This fixes a common issue where the old grid-based OCR would fail.
+**This fork** introduces many new fesatures to the original K5 viewer, but all based on the original capabilities of receiving screen frames from the com port using a programming cable like the Baofeng. It has a custom and significantly more robust **Anchor-Based OCR Engine**.
 
 > **Important Note:** K5Viewer is **NOT a remote control tool**. It is a passive *screenreader* and data logger. It cannot transmit, change frequencies, or modify settings on your radio. Its sole purpose is to read, display, and record the data from the radio's screen.
 
