@@ -1297,22 +1297,31 @@ class K5ViewerApp:
             self.replay_menu_scroll_offset = 0
             return
 
+        # --- START OF PLATFORM FIX ---
+        # Check the OS so we only run the Mac fix on Macs
+        is_macos = (sys.platform == 'darwin')
+        # --- END OF PLATFORM FIX ---
+
         for i, btn in enumerate(self.com_port_buttons):
             if btn.collidepoint(event.pos):
                 try:
                     device_path = self.com_ports[i].device
-                    if device_path.startswith("/dev/cu."):
+
+                    # --- START OF PLATFORM FIX ---
+                    # Only do the cu./tty. swap on macOS
+                    if is_macos and device_path.startswith("/dev/cu."):
                         tty_path = device_path.replace("/dev/cu.", "/dev/tty.", 1)
                         print(f"[Mac Fix] Attempting to use {tty_path} instead of {device_path}")
                         device_path = tty_path
-    
-                        self.ser = serial.Serial(device_path, BAUDRATE, timeout=TIMEOUT)
-                        self.data_queue = queue.Queue()
-                        self.stop_event = threading.Event()
-                        self.reader_thread = threading.Thread(target=serial_reader_thread, args=(self.ser, self.data_queue, self.stop_event), daemon=True)
-                        self.reader_thread.start()
-                        self.app_state = 'LIVE'
-                        self.connection_error_msg = ""
+                    # --- END OF PLATFORM FIX ---
+                        
+                    self.ser = serial.Serial(device_path, BAUDRATE, timeout=TIMEOUT)
+                    self.data_queue = queue.Queue()
+                    self.stop_event = threading.Event()
+                    self.reader_thread = threading.Thread(target=serial_reader_thread, args=(self.ser, self.data_queue, self.stop_event), daemon=True)
+                    self.reader_thread.start()
+                    self.app_state = 'LIVE'
+                    self.connection_error_msg = ""
                 except serial.SerialException as e:
                     self.connection_error_msg = f"Failed to connect: {e}"
     
@@ -1796,21 +1805,20 @@ class K5ViewerApp:
         y_pos = self.TOOLBAR_HEIGHT + 60
         win_width, _ = self.screen.get_size()
 
-        # Check the OS. 'darwin' is macOS. 'win32' is Windows.
+        # Check the OS. 'darwin' is macOS.
         is_macos = (sys.platform == 'darwin')
 
         for port in all_ports:
             
-            # Apply the strict filter ONLY on macOS. 
-            # Windows needs to see all ports, even those without VID/PID.
+            # On macOS, we apply a strict filter to hide system devices
             if is_macos and (port.vid is None or port.pid is None): 
-                continue
+                continue # Skip this port
             
-            # Now the logic is correct for both:
-            # - On Mac, only filtered ports are added.
-            # - On Windows, all ports are added.
+            # On Windows, all ports will pass this check.
+            # Add the valid port to our list *first*.
             self.com_ports.append(port)
             
+            # THEN, create a button for this valid port.
             btn_rect = pygame.Rect(20, y_pos, win_width - 40, 30)
             self.com_port_buttons.append(btn_rect)
             port_text = f"{port.device}: {port.description}"
