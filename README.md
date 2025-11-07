@@ -2,6 +2,8 @@
 
 `K5Viewer` is a powerful Python-based utility, forked from the `k5viewer` found in the [armel/uv-k5-firmware-custom](https://github.com/armel/uv-k5-firmware-custom) repository ([direct link](https://github.com/armel/uv-k5-firmware-custom/tree/main/k5viewer)). It mirrors the radio's 128x64 screen in real-time, provides a detailed live waterfall display, and automatically records full spectrum sessions to a local database.
 
+[![A link to the K5Viewer demo video](assets/screenshot.png)](https://youtu.be/BLnvxmcPg08)
+
 **This fork** introduces a significantly more robust **Anchor-Based OCR Engine**. This new system uses the `.` character in a frequency as an anchor, allowing it to reliably read centered text of varying lengths (e.g., `18.00000` or `446.10000`). This fixes a common issue where the old grid-based OCR would fail.
 
 > **Important Note:** K5Viewer is **NOT a remote control tool**. It is a passive *screenreader* and data logger. It cannot transmit, change frequencies, or modify settings on your radio. Its sole purpose is to read, display, and record the data from the radio's screen.
