@@ -1790,17 +1790,22 @@ class K5ViewerApp:
         title_surf = self.scale_large_font.render("Select a COM Port to Connect", True, (220, 220, 220))
         self.screen.blit(title_surf, (20, self.TOOLBAR_HEIGHT + 20))
         
-        self.com_ports = list_ports.comports()
+        all_ports = list_ports.comports()           # <-- CHANGE
+        self.com_ports = []                         # <-- CHANGE (Clear the list)
         self.com_port_buttons = []
         y_pos = self.TOOLBAR_HEIGHT + 60
         win_width, _ = self.screen.get_size()
 
-        for port in self.com_ports:
+        for port in all_ports:                      # <-- CHANGE (Loop all_ports)
              # Filter out ports without VID/PID unless explicitly requested?
             if port.vid is None or port.pid is None: continue
+            
+            # --- THIS IS THE FIX ---
+            # Only add the port to our *actual* list if it passes the filter
+            self.com_ports.append(port)             # <-- CHANGE (Add the valid port)
+            
             btn_rect = pygame.Rect(20, y_pos, win_width - 40, 30)
             self.com_port_buttons.append(btn_rect)
-            pygame.draw.rect(self.screen, (80, 80, 80), btn_rect)
             port_text = f"{port.device}: {port.description}"
             port_surf = self.font.render(port_text, True, (200, 200, 200))
             self.screen.blit(port_surf, (btn_rect.x + 10, btn_rect.y + 7))
