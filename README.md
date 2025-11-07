@@ -9,7 +9,8 @@ The main upgrade in this K5 viewer fork is a custom, much more robust Anchor-Bas
 
 > **Important Note:** K5Viewer is **NOT a remote control tool**. It is a passive *screenreader* and data logger. It cannot transmit, change frequencies, or modify settings on your radio. Its sole purpose is to read, display, and record the data from the radio's screen.
 
-
+**Important:** Due to the incremental way the firmware sends frames through the COM port, you must start the program while the radio is at its initial screen.
+**Troubleshooting:** If the program starts but no radio screen appears, try going back to the initial screen (exiting the spectrum analyzer view) and turning the radio off and on again.
 
 ## ✨ Key Features
 
