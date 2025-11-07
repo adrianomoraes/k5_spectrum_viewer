@@ -1296,9 +1296,15 @@ class K5ViewerApp:
             return
 
         for i, btn in enumerate(self.com_port_buttons):
-            if btn.collidepoint(event.pos):
-                try:
-                    self.ser = serial.Serial(self.com_ports[i].device, BAUDRATE, timeout=TIMEOUT)
+        if btn.collidepoint(event.pos):
+            try:
+                device_path = self.com_ports[i].device
+                if device_path.startswith("/dev/cu."):
+                    tty_path = device_path.replace("/dev/cu.", "/dev/tty.", 1)
+                    print(f"[Mac Fix] Attempting to use {tty_path} instead of {device_path}")
+                    device_path = tty_path
+
+                    self.ser = serial.Serial(device_path, BAUDRATE, timeout=TIMEOUT)
                     self.data_queue = queue.Queue()
                     self.stop_event = threading.Event()
                     self.reader_thread = threading.Thread(target=serial_reader_thread, args=(self.ser, self.data_queue, self.stop_event), daemon=True)
