@@ -1785,7 +1785,7 @@ class K5ViewerApp:
             
         pygame.display.flip()
 
-    def _render_connection_menu(self):
+def _render_connection_menu(self):
         pygame.display.set_caption(f"{self.base_title} – Connection Manager")
         title_surf = self.scale_large_font.render("Select a COM Port to Connect", True, (220, 220, 220))
         self.screen.blit(title_surf, (20, self.TOOLBAR_HEIGHT + 20))
@@ -1796,19 +1796,15 @@ class K5ViewerApp:
         y_pos = self.TOOLBAR_HEIGHT + 60
         win_width, _ = self.screen.get_size()
 
-        # --- START OF PLATFORM FIX ---
         # Check the OS. 'darwin' is macOS. 'win32' is Windows.
         is_macos = (sys.platform == 'darwin')
-        # --- END OF PLATFORM FIX ---
 
         for port in all_ports:
-             
-             # --- START OF PLATFORM FIX ---
-             # Apply the strict filter ONLY on macOS. 
-             # Windows needs to see all ports, even those without VID/PID.
-             if is_macos and (port.vid is None or port.pid is None): 
-                 continue
-             # --- END OF PLATFORM FIX ---
+            
+            # Apply the strict filter ONLY on macOS. 
+            # Windows needs to see all ports, even those without VID/PID.
+            if is_macos and (port.vid is None or port.pid is None): 
+                continue
             
             # Now the logic is correct for both:
             # - On Mac, only filtered ports are added.
@@ -1831,6 +1827,7 @@ class K5ViewerApp:
         pygame.draw.rect(self.screen, (50, 50, 50), toolbar_rect)
         pygame.draw.rect(self.screen, (100,100,100), self.btn_replay_toggle)
         self.screen.blit(self.font.render("Replay", True, (255,255,255)), (self.btn_replay_toggle.x+15, self.btn_replay_toggle.y+7))
+    
     def _render_replay_menu(self):
         pygame.display.set_caption(f"{self.base_title} – Replay Menu")
         win_width, win_height = self.screen.get_size()
