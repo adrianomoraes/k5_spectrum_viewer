@@ -4,7 +4,8 @@
 
 [![A link to the K5Viewer demo video](assets/screenshot.png)](https://youtu.be/BLnvxmcPg08)
 
-**This fork** introduces many new fesatures to the original K5 viewer, but all based on the original capabilities of receiving screen frames from the com port using a programming cable like the Baofeng. It has a custom and significantly more robust **Anchor-Based OCR Engine**.
+The main upgrade in this K5 viewer fork is a custom, much more robust Anchor-Based OCR Engine along with the waterfall view and session recording capabilities. It still uses the original method of pulling screen frames from the COM port with a programming cable, but now with added features.
+
 
 > **Important Note:** K5Viewer is **NOT a remote control tool**. It is a passive *screenreader* and data logger. It cannot transmit, change frequencies, or modify settings on your radio. Its sole purpose is to read, display, and record the data from the radio's screen.
 
