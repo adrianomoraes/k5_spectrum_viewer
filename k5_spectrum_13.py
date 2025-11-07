@@ -1790,19 +1790,30 @@ class K5ViewerApp:
         title_surf = self.scale_large_font.render("Select a COM Port to Connect", True, (220, 220, 220))
         self.screen.blit(title_surf, (20, self.TOOLBAR_HEIGHT + 20))
         
-        all_ports = list_ports.comports()           # <-- CHANGE
-        self.com_ports = []                         # <-- CHANGE (Clear the list)
+        all_ports = list_ports.comports()
+        self.com_ports = []
         self.com_port_buttons = []
         y_pos = self.TOOLBAR_HEIGHT + 60
         win_width, _ = self.screen.get_size()
 
-        for port in all_ports:                      # <-- CHANGE (Loop all_ports)
-             # Filter out ports without VID/PID unless explicitly requested?
-            if port.vid is None or port.pid is None: continue
+        # --- START OF PLATFORM FIX ---
+        # Check the OS. 'darwin' is macOS. 'win32' is Windows.
+        is_macos = (sys.platform == 'darwin')
+        # --- END OF PLATFORM FIX ---
+
+        for port in all_ports:
+             
+             # --- START OF PLATFORM FIX ---
+             # Apply the strict filter ONLY on macOS. 
+             # Windows needs to see all ports, even those without VID/PID.
+             if is_macos and (port.vid is None or port.pid is None): 
+                 continue
+             # --- END OF PLATFORM FIX ---
             
-            # --- THIS IS THE FIX ---
-            # Only add the port to our *actual* list if it passes the filter
-            self.com_ports.append(port)             # <-- CHANGE (Add the valid port)
+            # Now the logic is correct for both:
+            # - On Mac, only filtered ports are added.
+            # - On Windows, all ports are added.
+            self.com_ports.append(port)
             
             btn_rect = pygame.Rect(20, y_pos, win_width - 40, 30)
             self.com_port_buttons.append(btn_rect)
@@ -1820,7 +1831,6 @@ class K5ViewerApp:
         pygame.draw.rect(self.screen, (50, 50, 50), toolbar_rect)
         pygame.draw.rect(self.screen, (100,100,100), self.btn_replay_toggle)
         self.screen.blit(self.font.render("Replay", True, (255,255,255)), (self.btn_replay_toggle.x+15, self.btn_replay_toggle.y+7))
-
     def _render_replay_menu(self):
         pygame.display.set_caption(f"{self.base_title} – Replay Menu")
         win_width, win_height = self.screen.get_size()
