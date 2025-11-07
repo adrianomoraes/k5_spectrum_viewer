@@ -1311,8 +1311,8 @@ class K5ViewerApp:
                         self.reader_thread.start()
                         self.app_state = 'LIVE'
                         self.connection_error_msg = ""
-                    except serial.SerialException as e:
-                        self.connection_error_msg = f"Failed to connect: {e}"
+                except serial.SerialException as e:
+                    self.connection_error_msg = f"Failed to connect: {e}"
     
     def _handle_events_replay_menu(self, event):
         # --- Pass event to the energy slider first ---
