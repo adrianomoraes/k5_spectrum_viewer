@@ -28,14 +28,7 @@ The main upgrade in this K5 viewer fork is a custom, much more robust Anchor-Bas
 * A Quansheng UV-K5 (or compatible) radio and its USB programming cable.
 * A few Python libraries.
 
-To install the libraries, create a file named `requirements.txt` in the project folder with this content:
-
-```
-pyserial
-pygame
-```
-
-Then, run this command in your terminal:
+To install the libraries, run this command in your terminal:
 
 ```bash
 pip install -r requirements.txt
