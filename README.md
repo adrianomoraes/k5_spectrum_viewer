@@ -1,6 +1,6 @@
-# K5Viewer: Advanced Viewer & Recorder for Quansheng K5-Family Radios (permanent BETA)
+# K5 Spectrum Viewer: Improved Viewer & Recorder for Quansheng K5-Family Radios (permanent BETA)
 
-`K5Viewer` is a powerful Python-based utility, forked from the `k5viewer` found in the [armel/uv-k5-firmware-custom](https://github.com/armel/uv-k5-firmware-custom) repository ([direct link](https://github.com/armel/uv-k5-firmware-custom/tree/main/k5viewer)). It mirrors the radio's 128x64 screen in real-time, provides a detailed live waterfall display, and automatically records full spectrum sessions to a local database.
+`K5 Spectrum Viewer` is a powerful Python-based utility, forked from the `k5viewer` found in the [armel/uv-k5-firmware-custom](https://github.com/armel/uv-k5-firmware-custom) repository ([direct link](https://github.com/armel/uv-k5-firmware-custom/tree/main/k5viewer)). It mirrors the radio's 128x64 screen in real-time, provides a detailed live waterfall display, and automatically records full spectrum sessions to a local database.
 
 [![A link to the K5Viewer demo video](assets/screenshot.png)](https://youtu.be/BLnvxmcPg08)
 
