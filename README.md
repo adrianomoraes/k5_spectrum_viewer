@@ -84,6 +84,4 @@ Pull Requests are welcome! If you have improvements, especially for OCR robustne
 
 ## 📜 License
 
-This project is licensed under the **[PLEASE ADD LICENSE - e.g., MIT, GPLv3]** License.
-
-*(**Note:** Please check the license of the original project you forked from and ensure it is compatible. The MIT License is a common and permissive choice if you are unsure.)*
+This project is licensed under the **Apache License 2.0** License.
