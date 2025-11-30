@@ -1043,6 +1043,7 @@ class K5ViewerApp:
         self.connection_error_msg = ""
         self.last_frame_time = None
         self.current_frame_latency = 0.0
+        self.connection_menu_scroll_offset = 0 # Added for scrolling support
         
         # --- Recording State ---
         self.is_recording = False
@@ -1283,6 +1284,15 @@ class K5ViewerApp:
                 self._handle_events_replaying(event, was_dragging_before_event)
     
     def _handle_events_connection(self, event):
+        # Allow scroll events (buttons 4 and 5) even if not left click
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 4: # Scroll Up
+                self.connection_menu_scroll_offset = max(0, self.connection_menu_scroll_offset - 35)
+                return
+            elif event.button == 5: # Scroll Down
+                self.connection_menu_scroll_offset += 35
+                return
+
         if event.type != pygame.MOUSEBUTTONDOWN or event.button != 1: return
 
         if self.btn_replay_toggle.collidepoint(event.pos):
@@ -1802,11 +1812,23 @@ class K5ViewerApp:
         all_ports = list_ports.comports()
         self.com_ports = []
         self.com_port_buttons = []
-        y_pos = self.TOOLBAR_HEIGHT + 60
-        win_width, _ = self.screen.get_size()
-
+        # --- Scroll Logic ---
+        list_start_y = self.TOOLBAR_HEIGHT + 60
+        win_width, win_height = self.screen.get_size()
+        list_height = win_height - list_start_y
+        
         # Check the OS. 'darwin' is macOS.
         is_macos = (sys.platform == 'darwin')
+        
+        total_content_height = len(all_ports) * 35 # Approximation (some might be skipped on Mac)
+        max_scroll = max(0, total_content_height - list_height + 50) # +50 buffer
+        self.connection_menu_scroll_offset = max(0, min(self.connection_menu_scroll_offset, max_scroll))
+        
+        y_pos = list_start_y - self.connection_menu_scroll_offset
+
+        # Set clip area to prevent drawing over title/toolbar
+        clip_rect = pygame.Rect(0, list_start_y, win_width, list_height)
+        self.screen.set_clip(clip_rect)
 
         for port in all_ports:
             
@@ -1821,10 +1843,20 @@ class K5ViewerApp:
             # THEN, create a button for this valid port.
             btn_rect = pygame.Rect(20, y_pos, win_width - 40, 30)
             self.com_port_buttons.append(btn_rect)
-            port_text = f"{port.device}: {port.description}"
-            port_surf = self.font.render(port_text, True, (200, 200, 200))
-            self.screen.blit(port_surf, (btn_rect.x + 10, btn_rect.y + 7))
+            
+            # Only draw if visible
+            if btn_rect.bottom > list_start_y and btn_rect.top < win_height:
+                pygame.draw.rect(self.screen, (60, 60, 60), btn_rect) # Add background for better visibility
+                port_text = f"{port.device}: {port.description}"
+                port_surf = self.font.render(port_text, True, (200, 200, 200))
+                
+                # Clip text to button width
+                text_clip_rect = btn_rect.inflate(-20, 0)
+                self.screen.blit(port_surf, (btn_rect.x + 10, btn_rect.y + 7), text_clip_rect.move(-btn_rect.x - 10, -btn_rect.y - 7))
+
             y_pos += 35
+
+        self.screen.set_clip(None) # Reset clip
 
         
         if self.connection_error_msg:
